@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import generics, mixins, viewsets
 from .models import Product
 from .serializers import ProductSerializer
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 
@@ -15,3 +16,18 @@ class ProductView(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
 
     def post(self, request, *args, **kwargs):
         return self.create(request, *args, **kwargs)
+
+
+class ProductDetailView(viewsets.GenericViewSet,mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin ):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
