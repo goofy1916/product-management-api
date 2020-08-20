@@ -25,7 +25,7 @@ SECRET_KEY = 'fza62wd-@*@3i=&i*5*fm4zf2d30mx6ixed)2js7)0em^_+rn_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['piyushDongre16.pythonanywhere.com','localhost',]
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # installed apps
     'rest_framework',
     'corsheaders',
+    'django_filters',
     
     # User apps
     'inventory.apps.InventoryConfig',
@@ -58,6 +59,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 ROOT_URLCONF = 'mandakini_api.urls'
 

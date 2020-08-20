@@ -3,6 +3,8 @@ from rest_framework import generics, mixins, viewsets
 from .models import Product
 from .serializers import ProductSerializer
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 # Create your views here.
 
 
@@ -10,6 +12,10 @@ class ProductView(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    filter_backends = [filters.SearchFilter,filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['name', 'manufacturer']
+    ordering_fields =['name','manufacturer']
+    filterset_fields = ['name', 'manufacturer','category']
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
