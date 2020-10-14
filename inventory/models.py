@@ -5,7 +5,7 @@ from datetime import date
 
 class category(models.Model):
 
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, primary_key=True)
 
     def __str__(self):
         return self.name
@@ -18,26 +18,41 @@ class Product(models.Model):
     distributer = models.CharField(max_length=20, blank=True)
     category = models.ForeignKey('category', on_delete=models.CASCADE,default=None)
     size = models.CharField(max_length=10, blank= True)
-    weight = models.IntegerField(default = 0)
+    weight = models.FloatField(default = 0)
     quantity = models.IntegerField(default=1)
-    cost_price = models.CharField(max_length=50)
-    selling_price = models.CharField(max_length=50)
-    mfg_date = models.DateField(auto_now=False, auto_now_add=False, default=date.today)
-    exp_date = models.DateField(auto_now=False, auto_now_add=False)
+    cost_price = models.FloatField(default=0)
+    selling_price = models.FloatField(default=1)
+    mfg_date = models.DateField(default=date.today)
+    exp_date = models.DateField()
     #image
+
+    def __str__(self):
+        return self.name
+
+class Customer(models.Model):
+    name = models.CharField(max_length=50)
+    phone_no = models.IntegerField()
+    daily_service = models.BooleanField(default=False)
+    outstanding_amount = models.FloatField()
+    amount_paid = models.FloatField()
 
     def __str__(self):
         return self.name
     
 
+
+# To be added to actual project
 class Order(models.Model):
-    models.DateTimeField(auto_now=True, auto_now_add=True)
-    product = models.ManyToManyField("inventory.Product")
+    order_date = models.DateTimeField(auto_now=True)
     total_cost = models.CharField( max_length=50)
-    # customer
-    # paid/pending
+    order_items = models.ManyToManyField("inventory.Order_Items")
+    paid = models.BooleanField(default=False)
+    daily_order = models.BooleanField(default = False)
+    customer = models.ForeignKey("inventory.Customer", on_delete=models.CASCADE, blank= True)
 
-    
+    def __str__(self):
+        return f'{self.order_date}'
 
-class DailyDeliveries():
-    pass
+class Order_Items(models.Model):
+    product_id = models.IntegerField()
+    quantity = models.IntegerField(default=1)
